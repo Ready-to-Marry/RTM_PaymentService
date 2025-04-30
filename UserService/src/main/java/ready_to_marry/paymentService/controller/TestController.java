@@ -1,11 +1,10 @@
-package ready_to_marry.userservice.controller;
+package ready_to_marry.paymentService.controller;
 
 import lombok.RequiredArgsConstructor;
-import org.aspectj.weaver.ast.Test;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import ready_to_marry.userservice.entity.user.Users;
-import ready_to_marry.userservice.repository.TestRepository;
+import ready_to_marry.paymentService.entity.user.Users;
+import ready_to_marry.paymentService.repository.TestRepository;
 
 @RestController
 @RequiredArgsConstructor

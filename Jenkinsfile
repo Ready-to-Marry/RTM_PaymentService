@@ -3,7 +3,7 @@ pipeline {
     environment {
 	    SERVICE_REPO_NAME = 'RTM_PaymentService.git'
 	    DOCKER_IMAGE = 'hyundooboo/rtm-payment-service'
-	    SERVICE_NAME = 'Payment-service'
+	    SERVICE_NAME = 'payment-service'
 	    SPRING_DATASOURCE_URL = credentials('postgres-url')
 	    DB_CREDENTIALS = credentials('postgres-db-credentials')
 	    GITHUB_CREDENTIALS = credentials('github-token')

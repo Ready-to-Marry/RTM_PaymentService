@@ -15,7 +15,7 @@ public class TestController {
 
     @GetMapping("/")
     public String index() {
-        return "Health Check";
+        return "Health Check.";
     }
 
     @PostMapping("/add")

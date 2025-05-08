@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Inicis V2 일반결제 테스트</title>
+    <script src="https://cdn.portone.io/v2/browser-sdk.js" async defer></script>
+</head>
+<body>
+<h2>HTML5_INICIS 결제 요청</h2>
+<form id="paymentForm">
+    <label>상품 ID: <input id="productId" type="number" value="1"></label><br><br>
+    <label>회원 ID: <input id="memberId"  type="number" value="1"></label><br><br>
+    <button type="submit">결제 요청 보내기</button>
+</form>
+<pre id="response"></pre>
+
+<script>
+    const storeId    = "store-787f6656-a672-40e2-bcf8-8800a36e37d3";
+    const channelKey = "channel-key-5678b520-4adf-42d2-b3f2-80ec776f8f75";
+
+    // SDK 로드 대기
+    function waitForSDK() {
+        return new Promise(resolve => {
+            if (window.PortOne && typeof PortOne.requestPayment === "function") {
+                return resolve();
+            }
+            const timer = setInterval(() => {
+                if (window.PortOne && typeof PortOne.requestPayment === "function") {
+                    clearInterval(timer);
+                    resolve();
+                }
+            }, 50);
+        });
+    }
+
+    document.getElementById("paymentForm").addEventListener("submit", async e => {
+        e.preventDefault();
+        document.getElementById("response").textContent = "결제창 열기 전 대기…";
+        await waitForSDK();
+
+        const pid       = document.getElementById("productId").value;
+        const mid       = document.getElementById("memberId").value;
+        const paymentId = `mid_${Date.now()}`;
+
+        // 여기에 넘어가는 payload를 콘솔에 찍어보세요
+        const payload = {
+            storeId,
+            channelKey,
+            paymentId,
+            orderName:   "테스트 상품",
+            totalAmount: 10000,
+            currency:    "KRW",
+            payMethod:   "CARD",
+            customer: {
+                email: "test@example.com",   // 필수
+                firstName:  "현두",
+                lastName: "오",
+                phoneNumber: "010-1234-5678"
+            }
+        };
+        console.log("▶ requestPayment payload:", payload);
+
+        try {
+            const payment = await PortOne.requestPayment(payload);
+
+            if (payment.code && payment.code !== 0) {
+                throw new Error(payment.message);
+            }
+
+            // impUid로 백엔드 검증
+            const res = await fetch(
+                `/payments/verify?impUid=${payment.impUid}&productId=${pid}&memberId=${mid}`,
+                { method: "POST" }
+            );
+            const result = await res.json();
+            document.getElementById("response").textContent = JSON.stringify(result, null, 2);
+
+        } catch (err) {
+            document.getElementById("response").textContent = `에러: ${err.message}`;
+            console.error("PortOne.requestPayment error:", err);
+        }
+    });
+</script>
+</body>
+</html>

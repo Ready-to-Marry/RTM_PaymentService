@@ -29,7 +29,7 @@ public class Payment extends BaseEntity {
     private int amount;
 
     // 주문 번호
-    private String merchantUid;
+    private String orderId;
 
     // 결제 방식 ex) card, kakao
     private String paymentMethod;

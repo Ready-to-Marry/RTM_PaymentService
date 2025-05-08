@@ -6,9 +6,11 @@ import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.HashMap;
 import java.util.Map;
 
 @Service
+@RequiredArgsConstructor
 public class PortOneService {
 
     @Value("${portone.api.secret}")
@@ -55,6 +57,57 @@ public class PortOneService {
             // 예외 처리
             e.printStackTrace();
             throw new RuntimeException("Failed to get JWT token", e);
+        }
+    }
+
+    // 결제 정보 가져오는 함수
+    public Map<String, Object> getPaymentInfo(String jwtToken, String impUid) {
+        RestTemplate restTemplate = new RestTemplate();
+        HttpHeaders headers = new HttpHeaders();
+        headers.setBearerAuth(jwtToken);
+
+        HttpEntity<Void> request = new HttpEntity<>(headers);
+
+        ResponseEntity<Map> response = restTemplate.exchange(
+                "https://api.portone.io/payments/" + impUid,
+                HttpMethod.GET,
+                request,
+                Map.class
+        );
+
+        if (response.getStatusCode().is2xxSuccessful()) {
+            Map<String, Object> body = response.getBody();
+            if (body != null && body.containsKey("payment")) {
+                return (Map<String, Object>) body.get("payment");
+            } else {
+                throw new RuntimeException("결제 정보가 응답에 존재하지 않습니다.");
+            }
+        } else {
+            throw new RuntimeException("결제 조회 실패: " + response.getStatusCode());
+        }
+    }
+
+    // 결제 취소 함수
+    public void cancelAllPayment(String jwtToken, String impUid) {
+        RestTemplate restTemplate = new RestTemplate();
+        HttpHeaders headers = new HttpHeaders();
+        headers.setBearerAuth(jwtToken);
+        headers.setContentType(MediaType.APPLICATION_JSON);
+
+        Map<String, String> cancelData = new HashMap<>();
+        cancelData.put("reason", "결제 금액 불일치로 인한 취소");
+
+        HttpEntity<Map<String, String>> request = new HttpEntity<>(cancelData, headers);
+
+        ResponseEntity<Map> response = restTemplate.exchange(
+                "https://api.portone.io/payments/" + impUid + "/cancel",
+                HttpMethod.POST,
+                request,
+                Map.class
+        );
+
+        if (!response.getStatusCode().is2xxSuccessful()) {
+            throw new RuntimeException("결제 취소 실패: " + response.getStatusCode());
         }
     }
 }

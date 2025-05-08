@@ -1,27 +1,26 @@
 package ready_to_marry.paymentService.controller;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import ready_to_marry.paymentService.service.PortOneService;
+import ready_to_marry.paymentService.service.PaymentService;
+
+import java.io.IOException;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/payments")
 @RequiredArgsConstructor
 public class PaymentController {
 
-    private final PortOneService portOneService;
+    private final PaymentService paymentService;
 
-    @GetMapping("/test-portone")
-    public ResponseEntity<String> testPortOne() {
-        try {
-            String token = portOneService.getJwtToken();
-            return ResponseEntity.ok("정상적으로 토큰 발급됨: " + token);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("토큰 발급 실패: " + e.getMessage());
-        }
+    @PostMapping("/verify")
+    public ResponseEntity<Map<String, Object>> verifyPayment(
+            @RequestParam String impUid,
+            @RequestParam Long productId,
+            @RequestParam Long memberId
+    ) throws IOException {
+        return paymentService.PaymentsVerify(impUid, productId, memberId);
     }
 }

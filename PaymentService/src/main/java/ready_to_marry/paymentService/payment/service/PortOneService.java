@@ -1,4 +1,4 @@
-package ready_to_marry.paymentService.service;
+package ready_to_marry.paymentService.payment.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;

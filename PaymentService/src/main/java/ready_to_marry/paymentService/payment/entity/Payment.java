@@ -1,10 +1,11 @@
-package ready_to_marry.paymentService.entity;
+package ready_to_marry.paymentService.payment.entity;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import ready_to_marry.paymentService.common.util.BaseEntity;
 
 @Entity
 @Getter

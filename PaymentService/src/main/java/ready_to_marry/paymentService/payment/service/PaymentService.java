@@ -1,15 +1,15 @@
-package ready_to_marry.paymentService.service;
+package ready_to_marry.paymentService.payment.service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ready_to_marry.paymentService.entity.Payment;
-import ready_to_marry.paymentService.entity.PaymentStatus;
-import ready_to_marry.paymentService.exception.payment.PaymentException;
-import ready_to_marry.paymentService.repository.PaymentRepository;
+import ready_to_marry.paymentService.payment.entity.Payment;
+import ready_to_marry.paymentService.payment.entity.PaymentStatus;
+import ready_to_marry.paymentService.common.exception.payment.PaymentException;
+import ready_to_marry.paymentService.payment.repository.PaymentRepository;
 
-import java.io.IOException;
 import java.util.Map;
 
 @Service
@@ -20,7 +20,7 @@ public class PaymentService {
     private final PaymentRepository paymentRepository;
 
     @Transactional
-    public void verifyPayment(String paymentId, Long itemId, Long userId) throws IOException {
+    public void verifyPayment(String paymentId, Long itemId, Long userId) {
         ObjectMapper objectMapper = new ObjectMapper();
         String jwtToken = portOneService.getJwtToken();
 
@@ -31,7 +31,12 @@ public class PaymentService {
         int paidAmount = ((Number) amountMap.get("paid")).intValue();
 
         String pgResponseJson = (String) paymentInfo.get("pgResponse");
-        Map<String, Object> pgResponse = objectMapper.readValue(pgResponseJson, Map.class);
+        Map<String, Object> pgResponse;
+        try {
+            pgResponse = objectMapper.readValue(pgResponseJson, Map.class);
+        } catch (JsonProcessingException e) {
+            throw new PaymentException("파싱 중 오류 발생.");
+        }
 
         String paymentMethod = (String) pgResponse.get("payMethod");
 

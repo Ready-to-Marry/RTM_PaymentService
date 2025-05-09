@@ -1,4 +1,4 @@
-package ready_to_marry.paymentService.config;
+package ready_to_marry.paymentService.common.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

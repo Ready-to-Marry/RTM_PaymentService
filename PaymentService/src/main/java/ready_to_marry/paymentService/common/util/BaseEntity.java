@@ -1,4 +1,4 @@
-package ready_to_marry.paymentService.entity;
+package ready_to_marry.paymentService.common.util;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.EntityListeners;

@@ -69,7 +69,7 @@
 
             // impUid로 백엔드 검증
             const res = await fetch(
-                `/payments/verify?paymentId=${payment.paymentId}&productId=${pid}&memberId=${mid}`,
+                `/payment/verify?paymentId=${payment.paymentId}&productId=${pid}&memberId=${mid}`,
                 { method: "POST" }
             );
             const result = await res.json();

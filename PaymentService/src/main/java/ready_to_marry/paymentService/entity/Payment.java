@@ -28,12 +28,9 @@ public class Payment extends BaseEntity {
     private String itemName;
     private int amount;
 
-    // 주문 번호
-    private String orderId;
-
     // 결제 방식 ex) card, kakao
     private String paymentMethod;
 
     // 고유 번호 (아임포트에서 조회 및 환불 시 사용)
-    private String impUid;
+    private String paymentId;
 }

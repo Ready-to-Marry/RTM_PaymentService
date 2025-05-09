@@ -43,13 +43,12 @@
         const mid       = document.getElementById("memberId").value;
         const paymentId = `mid_${Date.now()}`;
 
-        // 여기에 넘어가는 payload를 콘솔에 찍어보세요
         const payload = {
             storeId,
             channelKey,
             paymentId,
             orderName:   "테스트 상품",
-            totalAmount: 10000,
+            totalAmount: 1000,
             currency:    "KRW",
             payMethod:   "CARD",
             customer: {
@@ -70,7 +69,7 @@
 
             // impUid로 백엔드 검증
             const res = await fetch(
-                `/payments/verify?impUid=${payment.impUid}&productId=${pid}&memberId=${mid}`,
+                `/payments/verify?paymentId=${payment.paymentId}&productId=${pid}&memberId=${mid}`,
                 { method: "POST" }
             );
             const result = await res.json();

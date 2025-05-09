@@ -89,7 +89,7 @@ public class PortOneService {
 
 
     // 결제 취소 함수
-    public void cancelAllPayment(String jwtToken, String impUid) {
+    public void cancelAllPayment(String jwtToken, String paymentId) {
         RestTemplate restTemplate = new RestTemplate();
         HttpHeaders headers = new HttpHeaders();
         headers.setBearerAuth(jwtToken);
@@ -101,7 +101,7 @@ public class PortOneService {
         HttpEntity<Map<String, String>> request = new HttpEntity<>(cancelData, headers);
 
         ResponseEntity<Map> response = restTemplate.exchange(
-                "https://api.portone.io/payments/" + impUid + "/cancel",
+                "https://api.portone.io/payments/" + paymentId + "/cancel",
                 HttpMethod.POST,
                 request,
                 Map.class

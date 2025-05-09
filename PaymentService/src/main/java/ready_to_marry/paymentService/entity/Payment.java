@@ -33,4 +33,11 @@ public class Payment extends BaseEntity {
 
     // 고유 번호 (아임포트에서 조회 및 환불 시 사용)
     private String paymentId;
+
+    @Enumerated(EnumType.STRING)
+    private PaymentStatus status;
+
+    public void setStatus(PaymentStatus status) {
+        this.status = status;
+    }
 }

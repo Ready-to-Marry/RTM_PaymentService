@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ready_to_marry.paymentService.entity.Payment;
+import ready_to_marry.paymentService.entity.PaymentStatus;
 import ready_to_marry.paymentService.exception.payment.PaymentException;
 import ready_to_marry.paymentService.repository.PaymentRepository;
 
@@ -53,8 +54,11 @@ public class PaymentService {
                 .amount(paidAmount)
                 .paymentMethod(paymentMethod)
                 .paymentId(paymentId)
+                .status(PaymentStatus.COMPLETED)
                 .build();
         paymentRepository.save(payment);
+
+        // user api 호출해서 유저의 결제 목록 추가 로직 구현 예정
 
         // 추후 알림 로직 등 추가 가능
         // fcmService.sendMessageTo(product.getMember().getDeviceToken(),
@@ -62,7 +66,27 @@ public class PaymentService {
         // product.getTitle() + "의 경매가 종료되었어요!",
         // Long.toString(itemId),
         // "PRODUCT");
+    }
 
+    @Transactional
+    public void canclePayment (Long id, Long userId) throws PaymentException {
+        Payment payment = paymentRepository.findById(id)
+                .orElseThrow(() -> new PaymentException("결제 정보가 존재하지 않습니다."));
+
+        // 결제 상태 확인 (환불 가능 상태 체크)
+        if (payment.getStatus() == PaymentStatus.REFUNDED) {
+            throw new PaymentException("이미 환불된 결제입니다.");
+        }
+
+        // 결제 시스템에 환불 요청
+        String jwtToken = portOneService.getJwtToken();
+        portOneService.cancelAllPayment(jwtToken, payment.getPaymentId());
+
+        payment.setStatus(PaymentStatus.REFUNDED);
+        paymentRepository.save(payment);
+
+        // 환불 완료 후 추가 로직 (예: 사용자 알림, 거래 내역 등)
+        // 예: fcmService.sendMessageTo(...);
     }
 
 }

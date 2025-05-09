@@ -61,7 +61,7 @@ public class PortOneService {
     }
 
     // 결제 정보 가져오는 함수
-    public Map<String, Object> getPaymentInfo(String jwtToken, String impUid) {
+    public Map<String, Object> getPaymentInfo(String jwtToken, String paymentId) {
         RestTemplate restTemplate = new RestTemplate();
         HttpHeaders headers = new HttpHeaders();
         headers.setBearerAuth(jwtToken);
@@ -69,7 +69,7 @@ public class PortOneService {
         HttpEntity<Void> request = new HttpEntity<>(headers);
 
         ResponseEntity<Map> response = restTemplate.exchange(
-                "https://api.portone.io/payments/" + impUid,
+                "https://api.portone.io/payments/" + paymentId,
                 HttpMethod.GET,
                 request,
                 Map.class
@@ -77,8 +77,8 @@ public class PortOneService {
 
         if (response.getStatusCode().is2xxSuccessful()) {
             Map<String, Object> body = response.getBody();
-            if (body != null && body.containsKey("payment")) {
-                return (Map<String, Object>) body.get("payment");
+            if (body != null && !body.isEmpty()) {
+                return body;
             } else {
                 throw new RuntimeException("결제 정보가 응답에 존재하지 않습니다.");
             }
@@ -86,6 +86,7 @@ public class PortOneService {
             throw new RuntimeException("결제 조회 실패: " + response.getStatusCode());
         }
     }
+
 
     // 결제 취소 함수
     public void cancelAllPayment(String jwtToken, String impUid) {
@@ -95,7 +96,7 @@ public class PortOneService {
         headers.setContentType(MediaType.APPLICATION_JSON);
 
         Map<String, String> cancelData = new HashMap<>();
-        cancelData.put("reason", "결제 금액 불일치로 인한 취소");
+        cancelData.put("reason", "결제 금액 불일치로 인한 취소/직접 결제 취소");
 
         HttpEntity<Map<String, String>> request = new HttpEntity<>(cancelData, headers);
 

@@ -1,0 +1,10 @@
+pipeline {
+    agent any
+    stages {
+        stage('Main Branch - test') {
+            steps {
+                echo "👋 👋 👋 👋 👋 👋 👋 👋 👋 👋"
+            }
+        }
+    }
+}

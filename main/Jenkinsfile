@@ -1,7 +1,7 @@
 pipeline {
     agent any
     environment {
-        SERVICE_NAME = 'partner-service'
+        SERVICE_NAME = 'payment-service'
         GITHUB_CREDENTIALS = credentials('github-token')
         HELM_REPO_URL = 'https://github.com/Ready-to-Marry/RTM_infra.git'
     }

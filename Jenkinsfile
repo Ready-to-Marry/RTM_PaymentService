@@ -2,11 +2,10 @@ def branch = env.BRANCH_NAME
 echo "🔀 Dispatcher: Current branch is '${branch}'"
 
 node {
-    // 현재 작업 디렉토리 출력
-    sh 'pwd'
+    checkout scm  // 강제 checkout
 
-    // 현재 디렉토리의 파일 목록 출력
     sh 'ls -al'
+    sh 'ls -al onprem || echo "onprem 디렉토리 없음"'
 
     if (branch == 'main') {
         load 'main/Jenkinsfile'

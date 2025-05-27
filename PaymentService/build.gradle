@@ -37,6 +37,7 @@ dependencies {
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+    implementation 'com.fasterxml.jackson.core:jackson-databind'
 
     // PostgreSQL JDBC Driver
     implementation 'org.postgresql:postgresql:42.2.5'
@@ -44,8 +45,8 @@ dependencies {
     // Spring Boot Actuator (Health Check용)
     implementation 'org.springframework.boot:spring-boot-starter-actuator'
 
-    // eureka client
-    implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client'
+//    // eureka client
+//    implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client'
 }
 
 tasks.named('test') {

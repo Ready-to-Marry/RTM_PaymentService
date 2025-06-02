@@ -1,0 +1,15 @@
+package ready_to_marry.paymentService.payment.dto;
+
+import lombok.*;
+
+@Getter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+public class PaymentRequestDto {
+    private String paymentId;
+    private Long productId;
+    private Long memberId;
+    private Long reservationId;
+    private Long partnerId;
+}

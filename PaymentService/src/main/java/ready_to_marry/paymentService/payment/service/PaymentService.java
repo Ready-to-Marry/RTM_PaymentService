@@ -9,7 +9,6 @@ import ready_to_marry.paymentService.common.exception.ErrorCode;
 import ready_to_marry.paymentService.common.exception.InfrastructureException;
 import ready_to_marry.paymentService.item.ItemClient;
 import ready_to_marry.paymentService.item.ItemDetailRequest;
-import ready_to_marry.paymentService.notification.dto.NotificationRequestDto;
 import ready_to_marry.paymentService.payment.dto.PaymentRequestDto;
 import ready_to_marry.paymentService.payment.entity.Payment;
 import ready_to_marry.paymentService.payment.entity.PaymentStatus;

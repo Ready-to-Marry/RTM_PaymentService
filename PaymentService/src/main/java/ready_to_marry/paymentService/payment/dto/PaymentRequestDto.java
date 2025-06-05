@@ -8,8 +8,8 @@ import lombok.*;
 @AllArgsConstructor
 public class PaymentRequestDto {
     private String paymentId;
-    private Long productId;
-    private Long memberId;
+    private Long itemId;
+    private Long userId;
     private Long reservationId;
     private Long partnerId;
 }

@@ -6,7 +6,6 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import ready_to_marry.paymentService.common.dto.ApiResponse;
 import ready_to_marry.paymentService.common.dto.ErrorDetail;
-import ready_to_marry.paymentService.common.exception.payment.PaymentException;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {

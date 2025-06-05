@@ -23,9 +23,7 @@ public class ContractClient {
 
         return webClientBuilder.build()
                 .get()
-                .uri(uriBuilder -> uriBuilder
-                        .path("/contracts/detail/{contractId}")
-                        .build(contractId))
+                .uri(BASE_URL+"/contracts/detail/{contractId}", contractId)
                 .retrieve()
                 .onStatus(
                         status -> status.isError(),

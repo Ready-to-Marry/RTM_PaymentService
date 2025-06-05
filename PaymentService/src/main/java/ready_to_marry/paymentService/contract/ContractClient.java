@@ -19,12 +19,12 @@ public class ContractClient {
 
     public ContractDetailRequest getContractDetail(Long contractId) {
         System.out.println(contractId);
-        System.out.println(BASE_URL + "/detail/{contractId}");
+        System.out.println(BASE_URL + "/contracts/detail/{contractId}");
 
         return webClientBuilder.build()
                 .get()
                 .uri(uriBuilder -> uriBuilder
-                        .path("/detail/{contractId}")
+                        .path("/contracts/detail/{contractId}")
                         .build(contractId))
                 .retrieve()
                 .onStatus(
@@ -33,7 +33,7 @@ public class ContractClient {
                                 .flatMap(body -> {
                                     int code = body.getCode();
                                     String message = body.getMessage();
-                                    System.out.println(BASE_URL + "/detail/{contractId}");
+                                    System.out.println(BASE_URL + "/contracts/detail/{contractId}");
 
                                     if (code == 2301) {
                                         return Mono.error(new InfrastructureException(ErrorCode.DB_SAVE_FAILURE, new RuntimeException(message)));

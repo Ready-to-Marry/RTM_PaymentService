@@ -7,8 +7,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ready_to_marry.paymentService.common.exception.ErrorCode;
 import ready_to_marry.paymentService.common.exception.InfrastructureException;
-import ready_to_marry.paymentService.item.ItemClient;
-import ready_to_marry.paymentService.item.ItemDetailRequest;
+import ready_to_marry.paymentService.contract.ContractClient;
+import ready_to_marry.paymentService.contract.ContractDetailRequest;
 import ready_to_marry.paymentService.payment.dto.PaymentRequestDto;
 import ready_to_marry.paymentService.payment.entity.Payment;
 import ready_to_marry.paymentService.payment.entity.PaymentStatus;
@@ -23,7 +23,7 @@ public class PaymentService {
 
     private final PortOneService portOneService; // JWT 발급을 위한 서비스
     private final PaymentRepository paymentRepository;
-    private final ItemClient itemClient;
+    private final ContractClient contractClient;
 
     @Transactional
     public void verifyPayment(PaymentRequestDto requestDto) {
@@ -50,13 +50,13 @@ public class PaymentService {
             throw new PaymentException("결제 정보가 누락되었습니다.");
         }
 
-        ItemDetailRequest itemDetailRequest;
+        ContractDetailRequest contractDetailRequest;
         try{
-            itemDetailRequest = itemClient.getItemDetail(requestDto.getItemId());
+            contractDetailRequest = contractClient.getContractDetail(requestDto.getContractId());
         } catch (Exception e) {
             throw new InfrastructureException(ErrorCode.EXTERNAL_API_FAILURE, e);
         }
-        int productPrice = itemDetailRequest.getPrice().intValue();
+        int productPrice = contractDetailRequest.getAmount();
 
         if (paidAmount != productPrice) {
             portOneService.cancelAllPayment(jwtToken, requestDto.getPaymentId());
@@ -67,8 +67,8 @@ public class PaymentService {
                 .userId(requestDto.getUserId())
                 .itemId(requestDto.getItemId())
                 .partnerId(requestDto.getPartnerId())
-                .reservationId(requestDto.getReservationId())
-                .itemName(itemDetailRequest.getName()) // TODO: DB에서 이름 조회 필요
+                .contractId(requestDto.getContractId())
+                .itemName(contractDetailRequest.getContractContent())
                 .amount(paidAmount)
                 .paymentMethod(paymentMethod)
                 .paymentId(requestDto.getPaymentId())

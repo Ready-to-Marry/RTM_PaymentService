@@ -25,7 +25,7 @@ public class Payment extends BaseEntity {
 
     private Long partnerId;
 
-    private Long reservationId;
+    private Long contractId;
 
     @Column(length = 255)
     private String itemName;

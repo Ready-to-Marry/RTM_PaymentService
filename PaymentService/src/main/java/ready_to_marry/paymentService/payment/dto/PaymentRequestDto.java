@@ -10,6 +10,6 @@ public class PaymentRequestDto {
     private String paymentId;
     private Long itemId;
     private Long userId;
-    private Long reservationId;
+    private Long contractId;
     private Long partnerId;
 }

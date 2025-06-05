@@ -1,4 +1,4 @@
-package ready_to_marry.paymentService.item;
+package ready_to_marry.paymentService.contract;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.ParameterizedTypeReference;
@@ -11,21 +11,21 @@ import ready_to_marry.paymentService.common.exception.InfrastructureException;
 
 @Component
 @RequiredArgsConstructor
-public class ItemClient {
+public class ContractClient {
 
     private final WebClient.Builder webClientBuilder;
 
-    private static final String BASE_URL = "http://catalog-service";
+    private static final String BASE_URL = "http://reservation-service";
 
-    public ItemDetailRequest getItemDetail(Long itemId) {
-        System.out.println(itemId);
-        System.out.println(BASE_URL + "/items/{itemId}/details");
+    public ContractDetailRequest getContractDetail(Long contractId) {
+        System.out.println(contractId);
+        System.out.println(BASE_URL + "/detail/{contractId}");
 
         return webClientBuilder.build()
                 .get()
                 .uri(uriBuilder -> uriBuilder
-                        .path("/items/{itemId}/details")
-                        .build(itemId))
+                        .path("/detail/{contractId}")
+                        .build(contractId))
                 .retrieve()
                 .onStatus(
                         status -> status.isError(),
@@ -33,7 +33,7 @@ public class ItemClient {
                                 .flatMap(body -> {
                                     int code = body.getCode();
                                     String message = body.getMessage();
-                                    System.out.println(BASE_URL + "/items/{itemId}/details");
+                                    System.out.println(BASE_URL + "/detail/{contractId}");
 
                                     if (code == 2301) {
                                         return Mono.error(new InfrastructureException(ErrorCode.DB_SAVE_FAILURE, new RuntimeException(message)));
@@ -42,7 +42,7 @@ public class ItemClient {
                                     }
                                 })
                 )
-                .bodyToMono(new ParameterizedTypeReference<ApiResponse<ItemDetailRequest>>() {})
+                .bodyToMono(new ParameterizedTypeReference<ApiResponse<ContractDetailRequest>>() {})
                 .map(ApiResponse::getData)
                 .block();
     }

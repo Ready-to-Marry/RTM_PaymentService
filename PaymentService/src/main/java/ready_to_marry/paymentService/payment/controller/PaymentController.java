@@ -16,6 +16,7 @@ public class PaymentController {
 
     @PostMapping("/verify")
     public ResponseEntity<ApiResponse<Void>> verifyPayment(@RequestBody PaymentRequestDto requestDto) {
+        System.out.println("호출 완료");
         paymentService.verifyPayment(requestDto);
         return ResponseEntity.ok(ApiResponse.success(0, "결제가 완료되었습니다.", null));
     }

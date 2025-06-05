@@ -20,21 +20,9 @@ public class BaseEntity {
 
     @CreatedDate
     @Column(updatable = false)
-    private LocalDate createdAt;
+    private LocalDateTime createdAt;
 
     @LastModifiedDate
     @Column
     private LocalDateTime updatedAt;
-
-    @CreatedBy
-    @Column
-    private String createdBy;
-
-    @LastModifiedBy
-    @Column
-    private String modifiedBy;
-
-    public void updateCreatedBy(String createdBy) {
-        this.createdBy = createdBy;
-    }
 }

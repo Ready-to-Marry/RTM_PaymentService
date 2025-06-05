@@ -17,7 +17,7 @@ public class ContractClient {
 
     private static final String BASE_URL = "http://reservation-service";
 
-    public ContractDetailRequest getContractDetail(Long contractId) {
+    public ContractResponse getContractDetail(Long contractId) {
         System.out.println(contractId);
         System.out.println(BASE_URL + "/contracts/detail/{contractId}");
 
@@ -40,7 +40,7 @@ public class ContractClient {
                                     }
                                 })
                 )
-                .bodyToMono(new ParameterizedTypeReference<ApiResponse<ContractDetailRequest>>() {})
+                .bodyToMono(new ParameterizedTypeReference<ApiResponse<ContractResponse>>() {})
                 .map(ApiResponse::getData)
                 .block();
     }

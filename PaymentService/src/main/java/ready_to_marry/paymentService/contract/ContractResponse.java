@@ -7,7 +7,7 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class ContractDetailRequest {
+public class ContractResponse {
     private Long partnerId;
     private Long itemId;
     private int amount;

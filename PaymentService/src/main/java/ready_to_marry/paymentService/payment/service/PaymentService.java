@@ -8,7 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 import ready_to_marry.paymentService.common.exception.ErrorCode;
 import ready_to_marry.paymentService.common.exception.InfrastructureException;
 import ready_to_marry.paymentService.contract.ContractClient;
-import ready_to_marry.paymentService.contract.ContractDetailRequest;
+import ready_to_marry.paymentService.contract.ContractResponse;
 import ready_to_marry.paymentService.payment.dto.PaymentRequestDto;
 import ready_to_marry.paymentService.payment.entity.Payment;
 import ready_to_marry.paymentService.payment.entity.PaymentStatus;
@@ -50,13 +50,13 @@ public class PaymentService {
             throw new PaymentException("결제 정보가 누락되었습니다.");
         }
 
-        ContractDetailRequest contractDetailRequest;
+        ContractResponse contractResponse;
         try{
-            contractDetailRequest = contractClient.getContractDetail(requestDto.getContractId());
+            contractResponse = contractClient.getContractDetail(requestDto.getContractId());
         } catch (Exception e) {
             throw new InfrastructureException(ErrorCode.EXTERNAL_API_FAILURE, e);
         }
-        int productPrice = contractDetailRequest.getAmount();
+        int productPrice = contractResponse.getAmount();
 
         if (paidAmount != productPrice) {
             portOneService.cancelAllPayment(jwtToken, requestDto.getPaymentId());
@@ -68,7 +68,7 @@ public class PaymentService {
                 .itemId(requestDto.getItemId())
                 .partnerId(requestDto.getPartnerId())
                 .contractId(requestDto.getContractId())
-                .itemName(contractDetailRequest.getContractContent())
+                .itemName(contractResponse.getContractContent())
                 .amount(paidAmount)
                 .paymentMethod(paymentMethod)
                 .paymentId(requestDto.getPaymentId())

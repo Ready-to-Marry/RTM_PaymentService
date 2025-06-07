@@ -42,8 +42,11 @@ dependencies {
     // PostgreSQL JDBC Driver
     implementation 'org.postgresql:postgresql:42.2.5'
 
-    // Spring Boot Actuator (Health Check용)
+    // Spring Boot Actuator
     implementation 'org.springframework.boot:spring-boot-starter-actuator'
+
+    // Micrometer-Registry
+    implementation 'io.micrometer:micrometer-registry-prometheus'
 
     // eureka client
     implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client'
